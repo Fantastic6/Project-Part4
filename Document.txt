@@ -1,0 +1,33 @@
+Part 4
+
+Object: Design and implement the modules for floating point and vector operations and simple pipelining. Entend the user interface.
+
+What we do:
+1. Pipeline: When implement a very simple pipeline with four stages.
+2. We implement all floating point operations and vector operations.
+
+How we do:
+1. In pepelining, we have four stages: Fetch; Decode; Execute; Write-back. When we click the SSS button, the program will process different instructions in different stage. Let us say we have 4 instruction call i1, i2, i3 and i4. When we click at the first time, CPU fetch i1 to IR and the rest part do nothing because there is no data. When we click it for the second time, CPU will first pass data in IR to the second stage for decoding and fetch the next instruction i2. For the third time, CPU excutes the i1, decodes i2 and fetch i3. At last, CPU will fetch i4, decode i3, excute i2 and write the result for i1 back to cache.
+Note: 1. When the instruction depends on the pervious instructions' result. There will automatically make a bubble in some stage, waiting for data. 2. We also add buffers between differen stages to implement stages. However, those buffers will be hidden from the outside.
+
+2. For floating point number. We first add two floating point registers to CPU which has 16 bits length. The syntax is just as what is on the descriptions. When we actually implement operations, we first convert floating point number by (-1)^s * 2^EXP + binarytoint(mantissa) * 10^((-1) * (getlength(binarytoint(mantissa))). Then we just perfrom the regular add for sub. When we finish, we just convert it back to floating number in the format of s, EXP and mantissa.
+Note: CNVRT's concept is litte vague. The F indicate in the description is not shown in the instruction.
+
+3. For vectors, we use FR to record the lenth and treat it as a adder for a batch of memory with another and store it in that batch of memory. In the instructions, we take length of the vector as the times for loop to excute. And we take c(EA) as the address of first vector and c(EA+1) as the starting address of second vector. Each of these vectors is c(fr) words long.
+Note: Since VSUB instruction has the same opcode with the TRAP instruction. So we make VSUB's opcode as 37 which is hold for CNVRT.
+
+Instruction Test:
+1. FADD: Set FR[0] = 2.2; mem[8] = 1, we run 10000100001000 which is FADD 0, 0, 8[,0]. We have FR[0] = 3.2
+2. FSUB: Set FR[0] = 2.2; mem[8] = 1, we run 10001000001000 which is FSUB 0, 0, 8[,0]. We have FR[0] = 1.2
+3. VADD: Set FR[0] = 2.0; mem[8] = 10, mem[9] = 12; mem[10] = 1; mem[11] = 2; mem[12] = 3; mem[13] = 4; we run 100011000001000 which is VADD 0, 0, 8[,0]. We can see mem[10] = 4, mem[11] = 6, mem[12] = 3, mem[13] = 4.
+4. VSUB: Set FR[0] = 2.0; mem[8] = 10, mem[9] = 12; mem[10] = 3; mem[11] = 4; mem[12] = 1; mem[13] = 2; we run 100100000001000 which is VSUB 0, 0, 8[,0]. We can see mem[10] = 2, mem[11] = 3, mem[12] = 1, mem[13] = 2.
+5. LDFR: Set FR[0] = 0; mem[8] = 1, we run 10010100001000 which is LDFR 0, 0, 8[,0]. We have FR[0] = 1.0.
+6. STFR: Set FR[0] = 2.0; mem[8] = 1, we run 10011000001000 which is STFR 0, 0, 8[,0]. We have mem[8] = 2.
+
+Pipeline Test:
+1. Load Program2.txt as Part 3.
+2. We run it by SSS button, if you chech the console, we can see some string like "First Stage finish -- Fetch", "Second Stage finish -- Decode" "Third Stage finish -- Execute" and "Last Stage finish -- WriteBack".
+3. Check opcode values for different stage, we can see different opcode, which means we actually rum different instructions in different in our CPU.
+Note: Stage information will not be showen if we just clilk run button.
+
+PS: The we keep the code for Program 1 and Program 2 unchanged, but we change the sentences for program2 to make test faster.
