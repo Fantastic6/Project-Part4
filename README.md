@@ -3,8 +3,8 @@
 ## Requirements
 
 1. Simualator, packaged as a file
-2. Floating Point and Vector Operations OR Enhanced Scheduling 
-3. Files of program 1 and program 2
+2. Pipelining, Floating Point and Vector Operations OR Enhanced Scheduling 
+3. Files of Program 1 and Program 2
 
 ## Tasks
 
